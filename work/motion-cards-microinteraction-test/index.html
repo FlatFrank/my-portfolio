@@ -5,303 +5,212 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Motion Cards — Microinteraction test — My Portfolio</title>
   <meta name="description" content="Prototype exploring hover + tap feedback for cards in a gallery layout.">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://api.fontshare.com">
-  
+  <link rel="stylesheet" href="https://api.fontshare.com/v2/css?f[]=general-sans@300,400,500,600,700&display=swap">
+  <script src="https://cdn.tailwindcss.com"></script>
   <style>
     :root {
-      --bg: #f9f9fb;
-    --bg-soft: #f2f2f5;
-    --fg: #111113;
-    --fg-soft: #444448;
-    --muted: #777780;
-    --border: #e2e2e8;
-    --accent: #111113;
-    --accent-fg: #ffffff;
-    --font-display: system-ui, 'Helvetica Neue', Arial, sans-serif;
-    --font-body: system-ui, 'Helvetica Neue', Arial, sans-serif;
-    --title-weight: 700;
-    --body-weight: 400;
-    --media-radius: 8px;
-    --btn-radius: 6px;
+      --font-barlow: 'General Sans', ui-sans-serif, system-ui, sans-serif;
+      --font-bodoni: 'Boska', Georgia, serif;
+      --bg:        oklch(99% 0.003 260);
+      --bg-soft:   oklch(96% 0.004 260);
+      --fg:        oklch(11% 0.006 260);
+      --fg-soft:   oklch(40% 0.006 260);
+      --muted:     oklch(56% 0.006 260);
+      --border:    oklch(88% 0.004 260);
+      --accent:    oklch(20% 0.006 260);
+      --accent-fg: oklch(99% 0.003 260);
+      --body-size: 1.125rem;
+      --body-size-sm: 1rem;
     }
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-:root { font-size: 16px; }
-body {
+    
+    [data-mode="light"] {
+  --bg:      oklch(99% 0.003 260);
+  --bg-soft: oklch(96% 0.004 260);
+  --fg:      oklch(11% 0.006 260);
+  --fg-soft: oklch(40% 0.006 260);
+  --muted:   oklch(56% 0.006 260);
+  --border:  oklch(88% 0.004 260);
+}
+[data-mode="dark"] {
+  --bg:      oklch(9%  0.006 260);
+  --bg-soft: oklch(14% 0.006 260);
+  --fg:      oklch(96% 0.003 260);
+  --fg-soft: oklch(75% 0.004 260);
+  --muted:   oklch(58% 0.005 260);
+  --border:  oklch(22% 0.005 260);
+}
+[data-scheme="neutral"] { --accent: oklch(20% 0.006 260); --accent-fg: oklch(99% 0.003 260); }
+[data-scheme="warm"]    { --accent: oklch(52% 0.16 35);   --accent-fg: #fff; }
+[data-scheme="cool"]    { --accent: oklch(52% 0.16 220);  --accent-fg: #fff; }
+[data-scheme="bold"]    { --accent: oklch(52% 0.22 290);  --accent-fg: #fff; }
+[data-typeface="humanist"]  { --font-display: var(--font-barlow); --font-body: var(--font-barlow); }
+[data-typeface="serif"]     { --font-display: var(--font-bodoni); --font-body: var(--font-barlow); }
+[data-typeface="geometric"] { --font-display: var(--font-barlow); --font-body: var(--font-barlow); }
+[data-typeface="slab"]      { --font-display: var(--font-bodoni); --font-body: var(--font-bodoni); }
+[data-portfolio-preview] {
+  min-height: 100vh;
   background: var(--bg);
   color: var(--fg);
   font-family: var(--font-body);
   font-weight: var(--body-weight, 400);
-  line-height: 1.6;
-  -webkit-font-smoothing: antialiased;
+  font-size: var(--body-size, 1.125rem);
 }
-h1, h2, h3, h4, h5 {
-  font-family: var(--font-display);
-  font-weight: var(--title-weight, 700);
-  line-height: 1.15;
-  color: var(--fg);
+[data-mode] h1,[data-mode] h2,[data-mode] h3,
+[data-mode] h4,[data-mode] h5,[data-mode] h6 { font-weight: var(--title-weight, 600); }
+[data-mode] h1 { font-size: var(--title-h1, 3.5rem); }
+[data-mode] h2 { font-size: var(--title-h2, 2.625rem); }
+[data-mode] h3 { font-size: var(--title-h3, 2rem); }
+[data-mode] h4 { font-size: var(--title-h4, 1.5rem); }
+/* Hero */
+.hero-inner { display: flex; flex-direction: column; gap: 2.5rem; }
+.hero-text  { display: flex; flex-direction: column; gap: 1.5rem; }
+.hero-image img { width: 100%; height: auto; border-radius: var(--media-radius, 0.75rem); display: block; }
+.project-card-image { border-radius: var(--media-radius, 0.75rem) !important; }
+figure > div { border-radius: var(--media-radius, 0.75rem) !important; }
+.portfolio-cta { border-radius: var(--btn-radius, 9999px) !important; }
+[data-hero-layout="centered"] .hero-inner { align-items: center; text-align: center; }
+[data-hero-layout="centered"] .hero-text  { align-items: center; }
+@media (min-width: 768px) {
+  [data-hero-layout="split"] .hero-inner { flex-direction: row; align-items: center; gap: 5rem; }
+  [data-hero-layout="split"] .hero-text  { flex: 1 1 0; }
+  [data-hero-layout="split"] .hero-image { flex: 1 1 0; }
 }
-a { color: inherit; text-decoration: none; }
-img { max-width: 100%; height: auto; display: block; border-radius: var(--media-radius); }
-p { color: var(--fg-soft); line-height: 1.7; }
-
-/* ── Nav ─────────────────────────────────────────────────────────────────── */
-.site-nav {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 1.25rem 2rem;
-  border-bottom: 1px solid var(--border);
-  position: sticky;
-  top: 0;
-  background: var(--bg);
-  z-index: 100;
+[data-hero-layout="editorial"] .hero-inner { flex-direction: column-reverse; }
+[data-hero-layout="editorial"] .hero-image { width: 100%; }
+[data-hero-layout="minimal"] .hero-image { display: none; }
+/* Works grid */
+.works-grid { display: grid; grid-template-columns: 1fr; }
+.works-col { display: contents; }
+[data-grid-layout="featured"] .works-grid-large { --card-aspect: 16/9; }
+@media (min-width: 768px) {
+  .works-grid { grid-template-columns: repeat(2, 1fr); }
+  [data-grid-layout="featured"] .works-grid       { grid-template-columns: repeat(2, 1fr); }
+  [data-grid-layout="featured"] .works-grid-large { grid-column: span 2; }
+  [data-grid-layout="three-col"] .works-grid { grid-template-columns: repeat(3, 1fr); }
+  [data-grid-layout="masonry"] .works-grid { display: flex; align-items: flex-start; }
+  [data-grid-layout="masonry"] .works-col  { display: flex; flex: 1; flex-direction: column; gap: 1.5rem; }
+  [data-grid-layout="list"] .works-grid         { grid-template-columns: 1fr; }
+  [data-grid-layout="list"] .project-card       { display: grid; grid-template-columns: 220px 1fr; gap: 1.5rem; align-items: start; }
+  [data-grid-layout="list"] .project-card-image { margin-bottom: 0; }
 }
-.site-nav__logo {
-  font-family: var(--font-display);
-  font-weight: var(--title-weight, 700);
-  font-size: 1rem;
-  letter-spacing: -0.01em;
+[data-grid-layout="masonry"] .works-col:nth-child(1) > *:nth-child(odd)  { --card-aspect: 1/1; }
+[data-grid-layout="masonry"] .works-col:nth-child(1) > *:nth-child(even) { --card-aspect: 3/4; }
+[data-grid-layout="masonry"] .works-col:nth-child(2) > *:nth-child(odd)  { --card-aspect: 3/4; }
+[data-grid-layout="masonry"] .works-col:nth-child(2) > *:nth-child(even) { --card-aspect: 1/1; }
+/* About */
+[data-about-layout="split"]   .about-portrait { order: -1; }
+[data-about-layout="minimal"] .about-portrait { display: none; }
+[data-about-layout="minimal"] .about-text     { grid-column: 1 / -1; }
+/* Project detail heading */
+.project-detail-hero { max-width: 72rem; padding-left: 1.5rem; padding-right: 1.5rem; }
+@media (min-width: 768px) { .project-detail-hero { padding-left: 3rem; padding-right: 3rem; } }
+.project-hero-inner { display: flex; flex-direction: column; }
+.project-cta { display: none; }
+[data-detail-heading="editorial"] .project-hero-inner { flex-direction: column-reverse; }
+[data-detail-heading="editorial"] .project-hero-text  { padding-top: 2.5rem; }
+[data-detail-heading="full-bleed"] .project-detail-hero { max-width: 100%; padding-left: 0; padding-right: 0; }
+[data-detail-heading="full-bleed"] .project-hero-text {
+  max-width: 72rem; margin-left: auto; margin-right: auto; padding-left: 1.5rem; padding-right: 1.5rem;
 }
-.site-nav__links {
-  display: flex;
-  gap: 1.5rem;
-  list-style: none;
-  font-size: 0.875rem;
-  color: var(--muted);
+@media (min-width: 768px) {
+  [data-detail-heading="full-bleed"] .project-hero-text { padding-left: 3rem; padding-right: 3rem; }
 }
-.site-nav__links a:hover { color: var(--fg); }
-
-/* ── Hero ────────────────────────────────────────────────────────────────── */
-.hero {
-  padding: 5rem 2rem;
-  max-width: 64rem;
-  margin: 0 auto;
+[data-detail-heading="full-bleed"] .project-hero-cover { border-radius: 0 !important; aspect-ratio: 21/9 !important; margin-top: 2rem; }
+[data-detail-heading="full-bleed"] .project-cta { display: block; }
+[data-detail-heading="full-bleed"] .project-meta-inner { max-width: 72rem; }
+[data-detail-heading="article"] .project-detail-hero { max-width: 100%; padding-left: 0; padding-right: 0; padding-top: 0; }
+[data-detail-heading="article"] .project-hero-inner { flex-direction: column-reverse; }
+[data-detail-heading="article"] .project-hero-cover { border-radius: 0 !important; aspect-ratio: 16/7 !important; }
+[data-detail-heading="article"] .project-hero-text {
+  max-width: 48rem; margin-left: auto; margin-right: auto; margin-bottom: 0; padding: 2.5rem 1.5rem 0.5rem;
 }
-.hero--centered { text-align: center; align-items: center; display: flex; flex-direction: column; }
-.hero__headline {
-  font-family: var(--font-display);
-  font-weight: var(--title-weight, 700);
-  font-size: clamp(2.25rem, 6vw, 4rem);
-  letter-spacing: -0.02em;
-  line-height: 1.1;
-  color: var(--fg);
-  margin-bottom: 1rem;
+@media (min-width: 768px) { [data-detail-heading="article"] .project-hero-text { padding: 3rem 3rem 0.5rem; } }
+[data-detail-heading="article"] .project-hero-summary {
+  font-size: 1.25rem !important; font-weight: 300; color: var(--fg); line-height: 1.65;
+  padding-top: 1.25rem; margin-top: 1.25rem; border-top: 1.5px solid var(--border); max-width: none;
 }
-.hero__subtitle {
-  font-size: 1.25rem;
-  color: var(--fg-soft);
-  max-width: 36rem;
-  margin-bottom: 1rem;
+[data-detail-heading="article"] .project-meta-inner { max-width: 48rem; }
+/* Detail body widths */
+.project-body-wrapper { max-width: 64rem; padding-left: 1.5rem; padding-right: 1.5rem; }
+@media (min-width: 768px) { .project-body-wrapper { padding-left: 3rem; padding-right: 3rem; } }
+[data-detail-body-width="narrow"] .project-body-wrapper { max-width: 40rem; }
+[data-detail-body-width="medium"] .project-body-wrapper { max-width: 48rem; }
+[data-detail-body-width="wide"]   .project-body-wrapper { max-width: 64rem; }
+[data-detail-body-width="full"]   .project-body-wrapper { max-width: 72rem; }
+[data-detail-body-width="full"]   .project-body-wrapper figure { margin-left: 0; margin-right: 0; }
+/* Project index */
+.project-index-grid { display: grid; grid-template-columns: 1fr; gap: 3.5rem 1.5rem; }
+@media (min-width: 768px) {
+  [data-project-index-layout="1+2"]   .project-index-grid { grid-template-columns: repeat(2, 1fr); }
+  [data-project-index-layout="1+2"]   .project-index-card:first-child { grid-column: span 2; }
+  [data-project-index-layout="1+2"]   .project-index-card:first-child .project-index-image { aspect-ratio: 16/9; }
+  [data-project-index-layout="2-col"] .project-index-grid { grid-template-columns: repeat(2, 1fr); }
+  [data-project-index-layout="list"]  .project-index-card { display: grid; grid-template-columns: 220px 1fr; gap: 1.5rem; align-items: start; }
+  [data-project-index-layout="list"]  .project-index-image { aspect-ratio: 4/3 !important; margin-bottom: 0; }
 }
-.hero__body { color: var(--muted); margin-bottom: 2rem; max-width: 32rem; }
-.hero__cta {
-  display: inline-block;
-  padding: 0.75rem 1.75rem;
-  background: var(--accent);
-  color: var(--accent-fg);
-  border-radius: var(--btn-radius);
-  font-weight: 600;
-  font-size: 0.9375rem;
-  transition: opacity 0.15s;
+/* Column blocks */
+.content-column > div > *:first-child { margin-top: 0; }
+.content-column figure { margin-left: 0; margin-right: 0; }
+@media (min-width: 640px) {
+  .content-column-list[style*="--col-template"] { grid-template-columns: var(--col-template); }
 }
-.hero__cta:hover { opacity: 0.85; }
-.hero__image { margin-top: 2rem; border-radius: var(--media-radius); overflow: hidden; }
-.hero--split { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center; }
-@media (max-width: 768px) {
-  .hero--split { grid-template-columns: 1fr; }
-  .site-nav { padding: 1rem 1.25rem; }
-  .site-nav__links { gap: 1rem; }
+/* Contact */
+[data-contact-layout="minimal"] .contact-inner { grid-template-columns: 1fr !important; max-width: 32rem; }
+/* Skip link */
+.skip-link {
+  position: absolute; top: -100%; left: 1rem; z-index: 9999;
+  padding: 0.375rem 0.875rem; background: var(--bg); color: var(--fg);
+  font-size: 0.8125rem; font-weight: 600; border: 1.5px solid var(--fg);
+  border-radius: 4px; text-decoration: none; transition: top 0.1s;
 }
-
-/* ── Section title ───────────────────────────────────────────────────────── */
-.section-title {
-  font-family: var(--font-display);
-  font-size: 0.75rem;
-  font-weight: 600;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: var(--muted);
-  margin-bottom: 2rem;
-}
-
-/* ── Project grid ────────────────────────────────────────────────────────── */
-.project-grid-section { padding: 4rem 2rem; }
-.project-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 1.5rem;
-  max-width: 72rem;
-  margin: 0 auto;
-}
-.project-card {
-  display: block;
-  border-radius: var(--media-radius);
-  overflow: hidden;
-  border: 1px solid var(--border);
-  transition: transform 0.2s, box-shadow 0.2s;
-}
-.project-card:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,0.08); }
-.project-card__img { aspect-ratio: 3/2; overflow: hidden; background: var(--bg-soft); }
-.project-card__img img { width: 100%; height: 100%; object-fit: cover; border-radius: 0; }
-.project-card__body { padding: 1.25rem; }
-.project-card__title {
-  font-family: var(--font-display);
-  font-weight: 600;
-  font-size: 1rem;
-  margin-bottom: 0.375rem;
-  color: var(--fg);
-}
-.project-card__meta { font-size: 0.8125rem; color: var(--muted); }
-
-/* ── Content body ────────────────────────────────────────────────────────── */
-.content-body { padding: 3rem 2rem; max-width: 52rem; margin: 0 auto; }
-.content-body h1 { font-size: 2.25rem; margin: 2rem 0 1rem; }
-.content-body h2 { font-size: 1.75rem; margin: 2rem 0 0.75rem; }
-.content-body h3 { font-size: 1.375rem; margin: 1.5rem 0 0.5rem; }
-.content-body p { margin-bottom: 1rem; }
-.content-body ul, .content-body ol { padding-left: 1.5rem; margin-bottom: 1rem; }
-.content-body li { margin-bottom: 0.375rem; color: var(--fg-soft); }
-.content-body blockquote {
-  border-left: 3px solid var(--accent);
-  padding: 0.75rem 1.25rem;
-  margin: 1.5rem 0;
-  color: var(--fg-soft);
-  background: var(--bg-soft);
-  border-radius: 0 var(--media-radius) var(--media-radius) 0;
-}
-.content-body code {
-  font-family: 'Fira Code', 'Courier New', monospace;
-  font-size: 0.875em;
-  background: var(--bg-soft);
-  padding: 0.15em 0.4em;
-  border-radius: 4px;
-}
-.content-body pre {
-  background: var(--bg-soft);
-  border: 1px solid var(--border);
-  border-radius: var(--media-radius);
-  padding: 1.25rem;
-  overflow-x: auto;
-  margin-bottom: 1.5rem;
-}
-.content-body pre code { background: none; padding: 0; }
-.content-body hr { border: none; border-top: 1px solid var(--border); margin: 2rem 0; }
-.content-body img { margin: 1.5rem 0; }
-.content-body figure { margin: 1.5rem 0; }
-.content-body figcaption { font-size: 0.8125rem; color: var(--muted); margin-top: 0.5rem; text-align: center; }
-.content-body table { width: 100%; border-collapse: collapse; margin-bottom: 1.5rem; }
-.content-body th, .content-body td { padding: 0.625rem 0.875rem; border: 1px solid var(--border); text-align: left; font-size: 0.9375rem; }
-.content-body th { background: var(--bg-soft); font-weight: 600; }
-.content-body a { color: var(--accent); text-decoration: underline; text-underline-offset: 2px; }
-
-/* ── About ───────────────────────────────────────────────────────────────── */
-.about-section { padding: 5rem 2rem; max-width: 64rem; margin: 0 auto; }
-.about-section--split { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: start; }
-.about-portrait { border-radius: var(--media-radius); overflow: hidden; }
-.about-portrait img { width: 100%; object-fit: cover; }
-@media (max-width: 768px) {
-  .about-section--split { grid-template-columns: 1fr; }
-}
-
-/* ── Contact ─────────────────────────────────────────────────────────────── */
-.contact-section { padding: 5rem 2rem; max-width: 40rem; margin: 0 auto; }
-.contact-section h1 { font-size: 2.5rem; margin-bottom: 1.5rem; }
-.contact-detail { display: flex; flex-direction: column; gap: 1rem; margin-top: 2rem; }
-.contact-link { color: var(--accent); text-decoration: underline; text-underline-offset: 2px; }
-.social-links { display: flex; flex-wrap: wrap; gap: 0.75rem; margin-top: 2rem; }
-.social-link {
-  font-size: 0.875rem;
-  color: var(--fg-soft);
-  border: 1px solid var(--border);
-  padding: 0.4rem 0.875rem;
-  border-radius: 100px;
-  transition: border-color 0.15s, color 0.15s;
-}
-.social-link:hover { border-color: var(--accent); color: var(--accent); }
-
-/* ── Project detail ──────────────────────────────────────────────────────── */
-.project-hero { padding: 4rem 2rem 2rem; max-width: 72rem; margin: 0 auto; }
-.project-hero h1 { font-size: clamp(2rem, 5vw, 3.5rem); margin-bottom: 1rem; }
-.project-hero-img { margin-top: 2rem; border-radius: var(--media-radius); overflow: hidden; }
-.project-hero-img img { width: 100%; max-height: 480px; object-fit: cover; }
-.project-meta {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 2rem;
-  padding: 2rem;
-  max-width: 72rem;
-  margin: 0 auto;
-  border-bottom: 1px solid var(--border);
-}
-.project-meta__item { display: flex; flex-direction: column; gap: 0.25rem; }
-.project-meta__label { font-size: 0.6875rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); font-weight: 600; }
-.project-meta__value { font-size: 0.9375rem; color: var(--fg); }
-.back-link { display: inline-flex; align-items: center; gap: 0.375rem; font-size: 0.875rem; color: var(--muted); padding: 1.5rem 2rem; }
-.back-link:hover { color: var(--fg); }
-
-/* ── CTA section ─────────────────────────────────────────────────────────── */
-.cta-section {
-  padding: 5rem 2rem;
-  text-align: center;
-  background: var(--bg-soft);
-  margin-top: 4rem;
-}
-.cta-section h2 { font-size: 2rem; margin-bottom: 0.75rem; }
-.cta-section p { color: var(--muted); margin-bottom: 2rem; }
-.cta-btn {
-  display: inline-block;
-  padding: 0.75rem 2rem;
-  background: var(--accent);
-  color: var(--accent-fg);
-  border-radius: var(--btn-radius);
-  font-weight: 600;
-}
-.cta-btn:hover { opacity: 0.85; }
-
-/* ── Footer ──────────────────────────────────────────────────────────────── */
-.site-footer {
-  border-top: 1px solid var(--border);
-  padding: 2.5rem 2rem;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 1rem;
-  font-size: 0.8125rem;
-  color: var(--muted);
-}
-.footer-nav { display: flex; gap: 1.25rem; }
-.footer-nav a:hover { color: var(--fg); }
+.skip-link:focus { top: 0.75rem; }
   </style>
 </head>
 <body>
-<nav class="site-nav">
-  <a class="site-nav__logo" href="../../">My Portfolio</a>
-  <ul class="site-nav__links">
-    <li><a href="../../">Home</a></li>
-    <li><a href="../../work/">Work</a></li>
-    <li><a href="../../about/">About</a></li>
-    <li><a href="../../contact/">Contact</a></li>
-  </ul>
-</nav>
-<main>
-  <a class="back-link" href="../../work/">← All work</a>
-  <div class="project-hero">
-    <h1>Motion Cards — Microinteraction test</h1>
-    <p style="font-size:1.125rem;color:var(--fg-soft);margin-top:0.5rem">Prototype exploring hover + tap feedback for cards in a gallery layout.</p>
-    <div class="project-hero-img"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/bf/Golden_Gate_Bridge_as_seen_from_Battery_East.jpg/1920px-Golden_Gate_Bridge_as_seen_from_Battery_East.jpg?_=20170624193337" alt="Motion Cards — Microinteraction test" loading="eager"></div>
+<div data-portfolio-preview="" data-mode="light" data-scheme="neutral" data-typeface="humanist" data-hero-layout="centered" data-grid-layout="featured" data-about-layout="editorial" data-detail-heading="default" data-detail-body-width="wide" data-project-index-layout="1+2" data-contact-layout="minimal">
+<header class="sticky top-0 z-40 border-b border-[var(--border)] bg-[var(--bg)]/90 backdrop-blur-sm">
+  <div class="max-w-6xl mx-auto px-6 md:px-12 h-14 flex items-center justify-between">
+    <a href="../../" class="text-sm font-semibold tracking-tight text-[var(--fg)] hover:text-[var(--fg-soft)] transition-colors rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--fg)] focus-visible:ring-offset-2">My Portfolio</a>
+    <nav aria-label="Main navigation" class="flex items-center gap-7">
+      <a href="../../#work" class="text-sm font-medium text-[var(--muted)] hover:text-[var(--fg)] transition-colors rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--fg)] focus-visible:ring-offset-2">Work</a>
+      <a href="../../about/" class="text-sm font-medium text-[var(--muted)] hover:text-[var(--fg)] transition-colors rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--fg)] focus-visible:ring-offset-2">About</a>
+      
+    </nav>
   </div>
-  <div class="project-meta"><div class="project-meta__item"><span class="project-meta__label">Category</span><span class="project-meta__value">Experiment</span></div></div>
-  <div class="content-body"><figure><img src="https://upload.wikimedia.org/wikipedia/commons/b/bf/Golden_Gate_Bridge_as_seen_from_Battery_East.jpg" alt="Microinteraction prototype frames" loading="lazy"><figcaption>Microinteraction prototype frames</figcaption></figure>
-<h3>Overview</h3>
-<p>A microinteraction prototype exploring how cards respond to hover, focus, and tap without feeling noisy.</p>
-<h3>Interactions</h3>
-<ul><li><p>Hover: subtle elevation + shadow</p></li><li><p>Focus: visible outline for keyboard users</p></li><li><p>Tap: quick compression + haptic-style timing</p></li></ul>
-<h3>Sample notes</h3>
-<p>The main constraint was keeping motion under 200ms for responsiveness. The final version uses easing that feels snappy, but never “bouncy,” to match a calm visual style.</p></div>
-  
+</header>
+<main class="project-detail-main">
+<section id="main-content" tabindex="-1" class="project-detail-hero pt-10 md:pt-14 pb-0 mx-auto outline-none">
+  <div class="project-hero-inner">
+    <div class="project-hero-text max-w-3xl mb-10">
+      <h1 class="text-[var(--fg)] tracking-tight leading-[1.08] mb-5" style="font-size:var(--title-h1, clamp(2rem, 4.5vw, 3.75rem));font-family:var(--font-display);font-weight:var(--title-weight, 600)">Motion Cards — Microinteraction test</h1>
+      <p class="project-hero-summary font-light text-[var(--fg-soft)] leading-relaxed max-w-2xl" style="font-size:var(--body-size, 1.125rem)">Prototype exploring hover + tap feedback for cards in a gallery layout.</p>
+      
+    </div>
+    <div class="project-hero-cover relative w-full overflow-hidden bg-[var(--bg-soft)]" style="aspect-ratio:16/9;border-radius:var(--media-radius, 0.75rem)">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/bf/Golden_Gate_Bridge_as_seen_from_Battery_East.jpg/1920px-Golden_Gate_Bridge_as_seen_from_Battery_East.jpg?_=20170624193337" alt="Cover image for Motion Cards — Microinteraction test" class="absolute inset-0 w-full h-full object-cover" loading="eager">
+  </div>
+  </div>
+</section>
+
+<div class="project-body-wrapper pb-14 mx-auto"><div class="space-y-0"><figure class="my-12 -mx-6 md:mx-0"><div class="relative overflow-hidden bg-[var(--bg-soft)]" style="border-radius:var(--media-radius, 0.75rem)"><img src="https://upload.wikimedia.org/wikipedia/commons/b/bf/Golden_Gate_Bridge_as_seen_from_Battery_East.jpg" alt="Microinteraction prototype frames" class="w-full h-auto block" loading="lazy"></div><figcaption class="text-xs text-[var(--muted)] mt-3 text-center font-light">Microinteraction prototype frames</figcaption></figure><h4 class="text-[var(--fg)] mt-10 mb-3" style="font-size:var(--title-h4, 1rem);font-family:var(--font-display);font-weight:var(--title-weight, 600)">Overview</h4><p class="text-[var(--fg-soft)] leading-[1.75] mt-5 max-w-[65ch]" style="font-size:var(--body-size, 1.125rem);font-weight:var(--body-weight, 300)">A microinteraction prototype exploring how cards respond to hover, focus, and tap without feeling noisy.</p><h4 class="text-[var(--fg)] mt-10 mb-3" style="font-size:var(--title-h4, 1rem);font-family:var(--font-display);font-weight:var(--title-weight, 600)">Interactions</h4><ul class="mt-5 space-y-2 max-w-[65ch] pl-1"><li class="flex gap-2.5 text-[var(--fg-soft)] leading-relaxed [&>p]:mt-0 [&>p]:max-w-none" style="font-size:var(--body-size, 1.125rem);font-weight:var(--body-weight, 300)"><span class="mt-[0.4em] w-1.5 h-1.5 rounded-full bg-[var(--muted)] flex-shrink-0" aria-hidden="true"></span><p class="text-[var(--fg-soft)] leading-[1.75] mt-5 max-w-[65ch]" style="font-size:var(--body-size, 1.125rem);font-weight:var(--body-weight, 300)">Hover: subtle elevation + shadow</p></li><li class="flex gap-2.5 text-[var(--fg-soft)] leading-relaxed [&>p]:mt-0 [&>p]:max-w-none" style="font-size:var(--body-size, 1.125rem);font-weight:var(--body-weight, 300)"><span class="mt-[0.4em] w-1.5 h-1.5 rounded-full bg-[var(--muted)] flex-shrink-0" aria-hidden="true"></span><p class="text-[var(--fg-soft)] leading-[1.75] mt-5 max-w-[65ch]" style="font-size:var(--body-size, 1.125rem);font-weight:var(--body-weight, 300)">Focus: visible outline for keyboard users</p></li><li class="flex gap-2.5 text-[var(--fg-soft)] leading-relaxed [&>p]:mt-0 [&>p]:max-w-none" style="font-size:var(--body-size, 1.125rem);font-weight:var(--body-weight, 300)"><span class="mt-[0.4em] w-1.5 h-1.5 rounded-full bg-[var(--muted)] flex-shrink-0" aria-hidden="true"></span><p class="text-[var(--fg-soft)] leading-[1.75] mt-5 max-w-[65ch]" style="font-size:var(--body-size, 1.125rem);font-weight:var(--body-weight, 300)">Tap: quick compression + haptic-style timing</p></li></ul><h4 class="text-[var(--fg)] mt-10 mb-3" style="font-size:var(--title-h4, 1rem);font-family:var(--font-display);font-weight:var(--title-weight, 600)">Sample notes</h4><p class="text-[var(--fg-soft)] leading-[1.75] mt-5 max-w-[65ch]" style="font-size:var(--body-size, 1.125rem);font-weight:var(--body-weight, 300)">The main constraint was keeping motion under 200ms for responsiveness. The final version uses easing that feels snappy, but never “bouncy,” to match a calm visual style.</p></div></div>
+<nav aria-label="Project navigation" class="px-6 md:px-12 py-14 border-t border-[var(--border)]">
+  <div class="max-w-6xl mx-auto flex justify-between gap-6">
+    <a href="../../work/mono-shapes-icon-exploration/" aria-label="Previous project: Mono Shapes — Icon exploration" class="group flex flex-col gap-1.5 max-w-[45%] rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--fg)] focus-visible:ring-offset-4"><span class="text-[0.65rem] font-semibold uppercase tracking-[0.14em] text-[var(--muted)]" aria-hidden="true">&#8592; Previous</span><span class="text-sm font-medium text-[var(--fg)] group-hover:text-[var(--fg-soft)] transition-colors leading-snug" aria-hidden="true">Mono Shapes — Icon exploration</span></a>
+    
+  </div>
+</nav>
 </main>
-<footer class="site-footer"><span>© 2026 My Portfolio</span></footer>
+<footer aria-label="Site footer" class="border-t border-[var(--border)] px-6 md:px-12 py-14">
+  <div class="max-w-6xl mx-auto flex flex-col md:flex-row items-start md:items-end justify-between gap-8">
+    <div>
+      <p class="text-sm font-semibold text-[var(--fg)] mb-1">My Portfolio</p>
+      
+      
+    </div>
+    
+  </div>
+</footer>
+</div>
 </body>
 </html>
