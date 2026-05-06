@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="h-full antialiased">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -7,11 +7,14 @@
   <meta name="description" content="Prototype exploring hover + tap feedback for cards in a gallery layout.">
   <link rel="preconnect" href="https://api.fontshare.com">
   <link rel="stylesheet" href="https://api.fontshare.com/v2/css?f[]=general-sans@300,400,500,600,700&display=swap">
+  <link rel="stylesheet" href="https://api.fontshare.com/v2/css?f[]=general-sans@300,400,500,700&display=swap">
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
     :root {
       --font-barlow: 'General Sans', ui-sans-serif, system-ui, sans-serif;
       --font-bodoni: 'Boska', Georgia, serif;
+      --font-display: var(--font-barlow);
+      --font-body:    var(--font-barlow);
       --bg:        oklch(99% 0.003 260);
       --bg-soft:   oklch(96% 0.004 260);
       --fg:        oklch(11% 0.006 260);
@@ -23,6 +26,7 @@
       --body-size: 1.125rem;
       --body-size-sm: 1rem;
     }
+    body { background: var(--bg); color: var(--fg); font-family: var(--font-body); }
     
     [data-mode="light"] {
   --bg:      oklch(99% 0.003 260);
@@ -167,8 +171,8 @@ figure > div { border-radius: var(--media-radius, 0.75rem) !important; }
 .skip-link:focus { top: 0.75rem; }
   </style>
 </head>
-<body>
-<div data-portfolio-preview="" data-mode="light" data-scheme="neutral" data-typeface="humanist" data-hero-layout="centered" data-grid-layout="featured" data-about-layout="editorial" data-detail-heading="default" data-detail-body-width="wide" data-project-index-layout="1+2" data-contact-layout="minimal">
+<body class="min-h-full flex flex-col">
+<div data-portfolio-preview="" data-mode="light" data-scheme="neutral" data-typeface="humanist" data-hero-layout="centered" data-grid-layout="three-col" data-about-layout="editorial" data-detail-heading="default" data-detail-body-width="wide" data-project-index-layout="1+2" data-contact-layout="minimal" style="--font-display:'General Sans', sans-serif;--font-body:'General Sans', sans-serif;--title-weight:400;--body-weight:300;--title-h1:4rem;--title-h2:3rem;--title-h3:2.25rem;--title-h4:1.75rem">
 <header class="sticky top-0 z-40 border-b border-[var(--border)] bg-[var(--bg)]/90 backdrop-blur-sm">
   <div class="max-w-6xl mx-auto px-6 md:px-12 h-14 flex items-center justify-between">
     <a href="../../" class="text-sm font-semibold tracking-tight text-[var(--fg)] hover:text-[var(--fg-soft)] transition-colors rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--fg)] focus-visible:ring-offset-2">My Portfolio</a>
